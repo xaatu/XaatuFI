@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "i+c8A4rH2YI=",
+  "success": true,
+  "projectFilePath": "/Users/sandyquigley/XaatuFI/XaatuFI/XaatuFI.csproj",
+  "expectedPackageFiles": [
+    "/Users/sandyquigley/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

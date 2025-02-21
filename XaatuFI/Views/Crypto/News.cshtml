@@ -1,0 +1,26 @@
+@model Newtonsoft.Json.Linq.JArray
+
+@{
+    ViewData["Title"] = "Crypto News";
+}
+
+<div class="container">
+    <h1 class="text-center my-4">Latest Cryptocurrency News</h1>
+
+    <div class="news-container"> 
+        @foreach (var item in Model)
+        {
+            <div class="card h-100 shadow"> 
+                <img src="@item["imageurl"]" class="card-img-top" alt="@item["title"]">
+                <div class="card-body">
+                    <h5 class="card-title">@item["title"]</h5>
+                    
+                    <a href="@item["url"]" target="_blank" class="btn btn-primary">Read More</a>
+                </div>
+                <div class="card-footer text-muted">
+                    @item["source"] - @item["published_on"]
+                </div>
+            </div>
+        }
+    </div>
+</div>

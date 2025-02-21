@@ -1,0 +1,123 @@
+@model Newtonsoft.Json.Linq.JObject
+
+@{
+    ViewData["Title"] = "Historical Data";
+    var cryptoId = ViewBag.CryptoId;
+    var currency = ViewBag.Currency;
+    var days = ViewBag.Days;
+}
+
+<div class="container">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a asp-action="Index" asp-route-currency="@currency" class="btn btn-secondary">
+            &larr; Back to Top Cryptos
+        </a>
+    </div>
+
+    <h1 class="text-center my-4">Historical Data for @cryptoId.ToUpper()</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form asp-action="HistoricalData" method="get" class="mb-4">
+                <div class="row">
+                    <!-- Cryptocurrency Dropdown -->
+                    <div class="col-md-4">
+                        <label for="id" class="form-label">Select Cryptocurrency:</label>
+                        <select id="id" name="id" class="form-select">
+                            <option value="bitcoin" selected="@(cryptoId == "bitcoin")">Bitcoin (BTC)</option>
+                            <option value="ethereum" selected="@(cryptoId == "ethereum")">Ethereum (ETH)</option>
+                            <option value="binancecoin" selected="@(cryptoId == "binancecoin")">Binance Coin (BNB)</option>
+                            <option value="ripple" selected="@(cryptoId == "ripple")">Ripple (XRP)</option>
+                            <option value="cardano" selected="@(cryptoId == "cardano")">Cardano (ADA)</option>
+                            <!-- Need more -->
+                        </select>
+                    </div>
+
+                    <!-- Currency Dropdown -->
+                    <div class="col-md-4">
+                        <label for="currency" class="form-label">Select Currency:</label>
+                        <select id="currency" name="currency" class="form-select">
+                            <option value="usd" selected="@(currency == "usd")">USD</option>
+                            <option value="eur" selected="@(currency == "eur")">EUR</option>
+                            <option value="gbp" selected="@(currency == "gbp")">GBP</option>
+                            <option value="jpy" selected="@(currency == "jpy")">JPY</option>
+                            <!-- Could add more but not really necessary atm -->
+                        </select>
+                    </div>
+
+                    <!-- Time Period Dropdown -->
+                    <div class="col-md-4">
+                        <label for="days" class="form-label">Select Time Period:</label>
+                        <select id="days" name="days" class="form-select">
+                            <option value="7" selected="@(days == 7)">7 Days</option>
+                            <option value="30" selected="@(days == 30)">30 Days</option>
+                            <option value="90" selected="@(days == 90)">90 Days</option>
+                            <option value="365" selected="@(days == 365)">1 Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Apply Button -->
+                <div class="row mt-3">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <canvas id="priceChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var prices = @Html.Raw(Model["prices"].ToString());
+        var labels = prices.map(p => new Date(p[0]).toLocaleDateString());
+        var data = prices.map(p => p[1]);
+
+        var ctx = document.getElementById('priceChart').getContext('2d');
+        var priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price (@currency)',
+                    data: data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Price (@currency)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

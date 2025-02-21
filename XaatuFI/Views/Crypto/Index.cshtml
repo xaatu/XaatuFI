@@ -1,0 +1,67 @@
+﻿@model List<CryptoMarketTracker.Models.CryptoCurrency>
+
+@{
+    ViewData["Title"] = "Top 10 Cryptocurrencies";
+    var currency = ViewBag.Currency ?? "USD";
+}
+
+<div class="container">
+    <h1 class="text-center my-4">Top 10 Cryptocurrencies by Market Cap</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="currency" class="form-label">Select Currency:</label>
+                        <select id="currency" name="currency" class="form-select">
+                            <option value="usd" selected="@(currency == "USD")">USD</option>
+                            <option value="eur" selected="@(currency == "EUR")">EUR</option>
+                            <option value="gbp" selected="@(currency == "GBP")">GBP</option>
+                            <option value="jpy" selected="@(currency == "JPY")">JPY</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Symbol</th>
+                            <th>Price (@currency)</th>
+                            <th>Market Cap</th>
+                            <th>24h Change</th>
+                            <th>Historical Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var crypto in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-action="HistoricalData" asp-route-id="@crypto.Id" asp-route-currency="@currency">
+                                        @crypto.Name
+                                    </a>
+                                </td>
+                                <td>@crypto.Symbol.ToUpper()</td>
+                                <td>@crypto.CurrentPrice.ToString("N2")</td>
+                                <td>@crypto.MarketCap.ToString("N0")</td>
+                                <td class="@(crypto.PriceChangePercentage24h >= 0 ? "text-success" : "text-danger")">
+                                    @crypto.PriceChangePercentage24h.ToString("N2")%
+                                </td>
+                                <td>
+                                    <a asp-action="HistoricalData" asp-route-id="@crypto.Id" asp-route-currency="@currency" class="btn btn-sm btn-outline-primary">View Chart</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

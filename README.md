@@ -2,10 +2,10 @@
 
 ## A cryptocurrency market tracker, with historical data and news features.
 
-## The market data is pulled from the Coingecko API and News data from the Cryptocompare API
+The market data is pulled from the Coingecko API and News data from the Cryptocompare API
 
 ### Target Framework:
-.net 9.0
+net 9.0
 
 ### Requirements:
 Newtonsoft 13.0.1
